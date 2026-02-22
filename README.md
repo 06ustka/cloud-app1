@@ -28,7 +28,7 @@ Ten projekt został zaplanowany z myślą o usługach PaaS (Platform as a Servic
 
 \* \[x] \*\*Artefakt 1:\*\* Zaplanowano strukturę folderów i diagram C4 (dostępny w `/docs`).
 
-\* \[ ] \*\*Artefakt 2:\*\* Konfiguracja środowiska Docker (w trakcie...).
+\* \[x] \*\*Artefakt 2:\*\* Konfiguracja środowiska Docker (w trakcie...).
 
 &nbsp;
 
