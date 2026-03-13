@@ -1,31 +1,20 @@
-version: "3.9"
- 
 services:
-  frontend:
-    build: ./frontend
-    ports:
-      - "8080:80"
-    networks:
-      - cloud-network
- 
-  backend:
-    build: ./backend
-    ports:
-      - "8081:80"
-    networks:
-      - cloud-network
- 
   db:
-    image: mcr.microsoft.com/azure-sql-edge
-    container_name: cloud-db
+    image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
-      SA_PASSWORD: "StrongPassword123!"
-      ACCEPT_EULA: "Y"
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=StrongPassword123!
     ports:
       - "1433:1433"
-    networks:
-      - cloud-network
- 
-networks:
-  cloud-network:
-    driver: bridge
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - db
+    restart: on-failure

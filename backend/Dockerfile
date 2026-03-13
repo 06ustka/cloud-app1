@@ -1,7 +1,14 @@
-#Dockerfile dla backendu
-#Wykorzystujemy minimalny obraz systemu Linux (Alpine)
-FROM alpine
-#Instalacja narzędzia curl do testów łączności międzyserwisowej
-RUN apk add --no-cache curl
-#Wypisanie statusu i zapętlenie procesu, aby kontener pozostał aktywny
-CMD ["sh", "-c", "echo 'Backend service is running...' && sleep infinity"]
+# Etap budowania
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY ["Backend.csproj", "./"]
+RUN dotnet restore "./Backend.csproj"
+COPY . .
+RUN dotnet publish "Backend.csproj" -c Release -o /app/publish
+
+# Etap uruchamiania
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /app
+EXPOSE 8080
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "Backend.dll"]
