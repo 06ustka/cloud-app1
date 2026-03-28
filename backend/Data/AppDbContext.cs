@@ -7,7 +7,6 @@ namespace Backend.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        // To reprezentuje naszą tabelę w bazie
         public DbSet<TaskItem> Tasks { get; set; }
     }
 }

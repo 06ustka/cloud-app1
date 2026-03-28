@@ -1,6 +1,6 @@
-namespace Backend.Models
+namespace Backend.DTOs
 {
-    public class TaskItem
+    public class TaskReadDto
     {
         public int Id { get; set; }
         public string Title { get; set; }

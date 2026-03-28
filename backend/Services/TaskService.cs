@@ -13,25 +13,29 @@ namespace Backend.Services
             _repository = repository;
         }
 
-        public async Task<IEnumerable<TaskDto>> GetAllTasksAsync()
+        // Metoda zwraca listę modeli TaskItem, które kontroler zmapuje na TaskReadDto
+        public async Task<IEnumerable<TaskItem>> GetAllTasksAsync()
         {
-            var tasks = await _repository.GetAllAsync();
-            return tasks.Select(t => new TaskDto { Id = t.Id, Title = t.Title, IsCompleted = t.IsCompleted });
+            return await _repository.GetAllAsync();
         }
 
-        public async Task<TaskDto?> GetTaskByIdAsync(int id)
+        // Metoda zwraca pojedynczy model TaskItem
+        public async Task<TaskItem?> GetTaskByIdAsync(int id)
         {
-            var task = await _repository.GetByIdAsync(id);
-            if (task == null) return null;
-            return new TaskDto { Id = task.Id, Title = task.Title, IsCompleted = task.IsCompleted };
+            return await _repository.GetByIdAsync(id);
         }
 
-        public async Task<TaskDto> CreateTaskAsync(TaskDto taskDto)
+        // Metoda przyjmuje TaskDto (dane wejściowe) i zwraca TaskItem (z nadanym przez bazę Id)
+        public async Task<TaskItem> CreateTaskAsync(TaskDto taskDto)
         {
-            var task = new TaskItem { Title = taskDto.Title, IsCompleted = taskDto.IsCompleted };
-            var createdTask = await _repository.AddAsync(task);
-            taskDto.Id = createdTask.Id;
-            return taskDto;
+            var task = new TaskItem
+            {
+                Title = taskDto.Title,
+                Description = taskDto.Description, // Pamiętaj o Description!
+                IsCompleted = taskDto.IsCompleted
+            };
+
+            return await _repository.AddAsync(task);
         }
 
         public async Task<bool> UpdateTaskAsync(int id, TaskDto taskDto)
@@ -40,6 +44,7 @@ namespace Backend.Services
             if (existingTask == null) return false;
 
             existingTask.Title = taskDto.Title;
+            existingTask.Description = taskDto.Description;
             existingTask.IsCompleted = taskDto.IsCompleted;
 
             await _repository.UpdateAsync(existingTask);
