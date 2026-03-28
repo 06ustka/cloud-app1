@@ -24,7 +24,12 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
-
+// Kod ratunkowy dla Azure
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate(); // To wysyła tabele do Azure przy starcie!
+}
 app.UseSwagger();
 app.UseSwaggerUI();
 
