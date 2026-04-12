@@ -1,4 +1,4 @@
-name: Final_Armor_Deploy
+name: Strategy_B_Clean_Deploy
 
 on:
   push:
@@ -16,12 +16,13 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Build and Publish
-        # Publikujemy backend do folderu 'out'
-        run: dotnet publish backend/Backend.csproj -c Release -o ./out
+        # Używamy -w (working directory), żeby GitHub wiedział, gdzie jest projekt
+        run: dotnet publish backend/Backend.csproj -c Release -o ./publish_output
 
       - name: Deploy to Azure
-        uses: azure/webapps-deploy@v3 # Zmieniono na v3
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'api-task-juliawr'
           publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-          package: ./out
+          # Wysyłamy TYLKO zawartość folderu publish_output
+          package: ./publish_output
