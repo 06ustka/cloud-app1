@@ -2,11 +2,21 @@ using Backend.Data;
 using Backend.Repositories;
 using Backend.Services;
 using Microsoft.EntityFrameworkCore;
+using Azure.Identity; // DODANE
+using Azure.Extensions.AspNetCore.Configuration.Secrets; // DODANE
 
 var builder = WebApplication.CreateBuilder(args);
 
+if (!builder.Environment.IsDevelopment())
+{
+    var keyVaultEndpoint = new Uri("https://kv-cloud-app1jw.vault.azure.net/");
+    builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
+}
+
+var connectionString = builder.Configuration.GetConnectionString("DbConnectionString") ?? builder.Configuration["DbConnectionString"];
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(connectionString));
 
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<ITaskService, TaskService>();
@@ -24,12 +34,14 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
-// Kod ratunkowy dla Azure
+
+
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.Migrate(); // To wysyła tabele do Azure przy starcie!
 }
+
 app.UseSwagger();
 app.UseSwaggerUI();
 
