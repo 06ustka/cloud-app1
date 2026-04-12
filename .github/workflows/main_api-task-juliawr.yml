@@ -1,4 +1,4 @@
-name: Azure_Deploy_Final_Try
+name: Final_Armor_Deploy
 
 on:
   push:
@@ -16,13 +16,12 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Build and Publish
-        # Budujemy i publikujemy backend do folderu o nazwie 'gotowe'
-        run: dotnet publish backend/Backend.csproj -c Release -o ./gotowe
+        # Publikujemy backend do folderu 'out'
+        run: dotnet publish backend/Backend.csproj -c Release -o ./out
 
       - name: Deploy to Azure
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3 # Zmieniono na v3
         with:
           app-name: 'api-task-juliawr'
           publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-          # Wysyłamy dokładnie to, co wygenerował Publish
-          package: ./gotowe
+          package: ./out
