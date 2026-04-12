@@ -3,6 +3,14 @@
 Projekt zrealizowany w ramach zajęć z aplikacji chmurowych. Architektura oparta na kontenerach Docker, backendzie .NET 8, bazie SQL Server oraz frontendzie w React (Vite).
 
 ---
+# Artefakt 7
+
+## Zabezpieczenia (Security)
+W projekcie wdrożono architekturę **Zero Trust** dla bazy danych.
+Zgodnie z dobrymi praktykami bezpieczeństwa w chmurze (Cloud Security):
+* Usunięto poświadczenia (Connection String) z kodu źródłowego.
+* Zastosowano **Azure Key Vault** jako bezpieczny magazyn wpisów tajnych.
+* Aplikacja uwierzytelnia się do magazynu kluczy bezhasłowo, wykorzystując **Tożsamość Zarządzaną (Managed Identity)** w usługach Azure App Service.
 # Artefakt 6 
 
 Projekt aplikacji typu Backend API do zarządzania zadaniami, stworzony w technologii .NET 8.0 i wdrożony w chmurze Microsoft Azure.
