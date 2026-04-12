@@ -1,5 +1,5 @@
 services:
-  # --- Baza Danych (Punkt 5.2: Trwałość danych) ---
+
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sql_server_db
@@ -12,7 +12,7 @@ services:
       - my_db_data:/var/opt/mssql # To zapewnia, że dane nie znikną po restarcie
     restart: always
 
-  # --- Backend API (Punkt 5.1: Obsługa DTO) ---
+
   api:
     build:
       context: ./backend
@@ -27,7 +27,7 @@ services:
       - db
     restart: on-failure
 
-  # --- Frontend React (Punkt 5.4: Interfejs Użytkownika) ---
+
   frontend:
     image: node:22-alpine
     container_name: frontend_react_final
@@ -38,12 +38,13 @@ services:
       - "3001:3000"
     command: sh -c "npm install && npm run dev -- --host --port 3000"
     environment:
-      - REACT_APP_API_URL=http://localhost:8081/api
+
+      - REACT_APP_API_URL=https://api-task-juliawr-d8d6ara7fygcekdk.polandcentral-01.azurewebsites.net/api
     stdin_open: true
     tty: true
     depends_on:
       - api
 
-# Definicja wolumenu dla bazy danych (Punkt 5.2)
+
 volumes:
   my_db_data:

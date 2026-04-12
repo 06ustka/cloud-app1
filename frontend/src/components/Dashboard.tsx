@@ -12,7 +12,8 @@ const Dashboard: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
-    const API_URL = 'http://localhost:8081/api/tasks';
+    // ZMIENIONO: Adres URL wskazuje teraz na Twój backend w Azure
+    const API_URL = 'https://api-task-juliawr-d8d6ara7fygcekdk.polandcentral-01.azurewebsites.net/api/tasks';
 
     // Pobieranie danych (List)
     const fetchTasks = async () => {
@@ -68,20 +69,4 @@ const Dashboard: React.FC = () => {
 
             {isLoading ? (
                 <p>Ładowanie...</p>
-            ) : (
-                <ul>
-                    {tasks.map(task => (
-                        <li key={task.id} style={{ marginBottom: '10px' }}>
-                            {task.title} - <strong>{task.isCompleted ? 'Zakończone' : 'W toku'}</strong>
-                            <button onClick={() => handleDelete(task.id)} style={{ marginLeft: '10px', cursor: 'pointer' }}>
-                                Usuń
-                            </button>
-                        </li>
-                    ))}
-                </ul>
-            )}
-        </div>
-    );
-};
-
-export default Dashboard;
+            ) :

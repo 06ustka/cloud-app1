@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
-// Definicja struktury zadania (zgodna z Twoim DTO w C#)
 interface Task {
   id: number;
   title: string;
@@ -13,8 +12,8 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Pobieranie danych z Twojego API w Dockerze
-    fetch('http://localhost:8081/api/Tasks')
+
+    fetch('https://api-task-juliawr-d8d6ara7fygcekdk.polandcentral-01.azurewebsites.net/api/Tasks')
       .then(res => res.json())
       .then(data => {
         setTasks(data);
