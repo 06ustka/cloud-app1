@@ -8,9 +8,9 @@ namespace TaskManager.Tests
         [Fact]
         public void NewTask_ShouldNotBeCompleted()
         {
-
             var task = new TaskItem { Title = "Przetestować bezpiecznik" };
-            Assert.False(task.isCompleted);
+
+            Assert.False(task.IsCompleted);
         }
     }
 }

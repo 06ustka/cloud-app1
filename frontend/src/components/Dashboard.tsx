@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import api from '../services/api';
+import api from './services/api';
 
 interface TaskItem {
   id: number;
@@ -15,7 +15,10 @@ const Dashboard = () => {
   const fetchTasks = () => {
     api.get('/tasks')
       .then((res: any) => setItems(res.data))
-      .catch(() => setError("Błąd połączenia z API."));
+      .catch((err: any) => {
+        console.error(err);
+        setError("Błąd połączenia z API.");
+      });
   };
 
   useEffect(() => { fetchTasks(); }, []);
@@ -24,7 +27,8 @@ const Dashboard = () => {
     try {
       await api.delete(`/tasks/${id}`);
       setItems(items.filter(item => item.id !== id));
-    } catch {
+    } catch (err: any) {
+      console.error(err);
       setError("Nie udało się usunąć zadania.");
     }
   };
@@ -34,7 +38,8 @@ const Dashboard = () => {
       const updated = { ...item, isCompleted: !item.isCompleted };
       await api.put(`/tasks/${item.id}`, updated);
       setItems(items.map(t => t.id === item.id ? updated : t));
-    } catch {
+    } catch (err: any) {
+      console.error(err);
       setError("Nie udało się zaktualizować zadania.");
     }
   };
@@ -46,7 +51,8 @@ const Dashboard = () => {
       await api.post('/tasks', { title: newTaskName });
       setNewTaskName("");
       fetchTasks();
-    } catch {
+    } catch (err: any) {
+      console.error(err);
       setError("Błąd podczas dodawania.");
     }
   };
@@ -75,5 +81,4 @@ const Dashboard = () => {
     </div>
   );
 };
-
 export default Dashboard;
