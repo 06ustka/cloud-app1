@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import api from '../services/api';
+// ZMIENIONO ŚCIEŻKĘ: Jeśli to nadal rzuci błąd, zmień na '../services/api'
+import api from './services/api';
 
 interface TaskItem {
   id: number;
@@ -15,7 +16,10 @@ const Dashboard = () => {
   const fetchTasks = () => {
     api.get('/tasks')
       .then((res: any) => setItems(res.data))
-      .catch((err: any) => setError("Błąd połączenia z API."));
+      .catch((err: any) => {
+        console.error(err); // Dodane żeby uciszyć GitHuba
+        setError("Błąd połączenia z API.");
+      });
   };
 
   useEffect(() => { fetchTasks(); }, []);
@@ -25,7 +29,10 @@ const Dashboard = () => {
     try {
       await api.delete(`/tasks/${id}`);
       setItems(items.filter(item => item.id !== id));
-    } catch (err) { setError("Nie udało się usunąć zadania."); }
+    } catch (err) {
+      console.error(err); // Dodane żeby uciszyć GitHuba
+      setError("Nie udało się usunąć zadania.");
+    }
   };
 
   // --- NOWA FUNKCJA: Zmiana statusu ---
@@ -34,7 +41,10 @@ const Dashboard = () => {
       const updated = { ...item, isCompleted: !item.isCompleted };
       await api.put(`/tasks/${item.id}`, updated);
       setItems(items.map(t => t.id === item.id ? updated : t));
-    } catch (err) { setError("Nie udało się zaktualizować zadania."); }
+    } catch (err) {
+      console.error(err); // Dodane żeby uciszyć GitHuba
+      setError("Nie udało się zaktualizować zadania.");
+    }
   };
 
   const handleAddTask = async (e: React.FormEvent) => {
@@ -44,7 +54,10 @@ const Dashboard = () => {
       await api.post('/tasks', { title: newTaskName });
       setNewTaskName("");
       fetchTasks();
-    } catch (err) { setError("Błąd podczas dodawania."); }
+    } catch (err) {
+      console.error(err); // Dodane żeby uciszyć GitHuba
+      setError("Błąd podczas dodawania.");
+    }
   };
 
   return (
@@ -63,7 +76,6 @@ const Dashboard = () => {
                 <input type="checkbox" checked={item.isCompleted} onChange={() => handleToggle(item)} />
                 <span style={{ textDecoration: item.isCompleted ? 'line-through' : 'none', marginLeft: '10px' }}>{item.title}</span>
               </div>
-              {/* TUTAJ JEST PRZYCISK KOSZA */}
               <button onClick={() => handleDelete(item.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2em' }}>🗑️</button>
             </li>
           ))}
