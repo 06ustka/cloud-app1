@@ -3,7 +3,17 @@
 Projekt zrealizowany w ramach zajęć z aplikacji chmurowych. Architektura oparta na kontenerach Docker, backendzie .NET 8, bazie SQL Server oraz frontendzie w React (Vite).
 
 ---
-# Artefakt 7
+## 🚦 Status Projektuf
+
+* [x] **Artefakt 8.1:** Projekt testowy i automatyczne testy jednostkowe.
+* [x] **Artefakt 8.2:** Zautomatyzowane wdrażanie (CI/CD) przez GitHub Actions.
+* [x] **Artefakt 8.3:** Modyfikacja wyglądu (złoty napis).
+* [x] **Artefakt 8.4:** Dodanie nowej funkcjonalności (usuwanie zadań).
+* [x] **Artefakt 8.5:** Dokumentacja techniczna API (Swagger UI) dostępna publicznie.
+
+## 🚀 Linki
+* **Dokumentacja API (Swagger):** https://api-task-juliawr-d8d6ara7fygcekdk.polandcentral-01.azurewebsites.net/swagger
+* [x] 
 
 ## Zabezpieczenia (Security)
 W projekcie wdrożono architekturę **Zero Trust** dla bazy danych.

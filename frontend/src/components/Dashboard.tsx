@@ -17,7 +17,7 @@ const Dashboard = () => {
       .then((res: any) => setItems(res.data))
       .catch((err: any) => {
         console.error(err);
-        setError("Błąd połączenia z API.");
+        setError("Błąd połączenia. (Baza może się wybudzać...)");
       });
   };
 
@@ -27,6 +27,7 @@ const Dashboard = () => {
     try {
       await api.delete(`/tasks/${id}`);
       setItems(items.filter(item => item.id !== id));
+      setError("");
     } catch (err: any) {
       console.error(err);
       setError("Nie udało się usunąć zadania.");
@@ -38,6 +39,7 @@ const Dashboard = () => {
       const updated = { ...item, isCompleted: !item.isCompleted };
       await api.put(`/tasks/${item.id}`, updated);
       setItems(items.map(t => t.id === item.id ? updated : t));
+      setError("");
     } catch (err: any) {
       console.error(err);
       setError("Nie udało się zaktualizować zadania.");
@@ -48,19 +50,25 @@ const Dashboard = () => {
     e.preventDefault();
     if (!newTaskName.trim()) return;
     try {
-      await api.post('/tasks', { title: newTaskName });
+      // TUTAJ ZMIANA: Wysyłamy wymagane przez C# dodatkowe pola!
+      await api.post('/tasks', {
+        title: newTaskName,
+        description: "Brak opisu", // <-- Tego brakowało!
+        isCompleted: false
+      });
       setNewTaskName("");
       fetchTasks();
+      setError(""); // Czyścimy błąd po sukcesie
     } catch (err: any) {
       console.error(err);
-      setError("Błąd podczas dodawania.");
+      setError("Błąd dodawania. Poczekaj 30 sekund (baza się budzi) i spróbuj ponownie.");
     }
   };
 
   return (
     <div style={{ padding: '20px', textAlign: 'center', fontFamily: 'Arial, sans-serif' }}>
       <h1>☁️ Cloud App Dashboard</h1>
-      {error && <div style={{ color: 'red' }}>{error}</div>}
+      {error && <div style={{ color: 'red', margin: '10px' }}>{error}</div>}
       <form onSubmit={handleAddTask} style={{ marginBottom: '30px' }}>
         <input type="text" placeholder="Wpisz nowe zadanie..." value={newTaskName} onChange={(e) => setNewTaskName(e.target.value)} style={{ padding: '10px', width: '250px' }} />
         <button type="submit" style={{ marginLeft: '10px', padding: '10px 20px' }}>Dodaj</button>
