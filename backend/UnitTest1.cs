@@ -1,5 +1,5 @@
 using Xunit;
-using Backend.Models; // Używamy Twojego folderu z modelami
+using Backend.Models;
 
 namespace TaskManager.Tests
 {
@@ -8,9 +8,9 @@ namespace TaskManager.Tests
         [Fact]
         public void NewTask_ShouldNotBeCompleted()
         {
-            var task = new TaskItem { Title = "Przetestować bezpiecznik" };
 
-            Assert.False(task.IsCompleted);
+            var task = new TaskItem { Title = "Przetestować bezpiecznik" };
+            Assert.False(task.isCompleted);
         }
     }
 }

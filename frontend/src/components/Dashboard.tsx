@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-// ZMIENIONO ŚCIEŻKĘ: Jeśli to nadal rzuci błąd, zmień na '../services/api'
-import api from './services/api';
+import api from '../services/api';
 
 interface TaskItem {
   id: number;
@@ -16,33 +15,26 @@ const Dashboard = () => {
   const fetchTasks = () => {
     api.get('/tasks')
       .then((res: any) => setItems(res.data))
-      .catch((err: any) => {
-        console.error(err); // Dodane żeby uciszyć GitHuba
-        setError("Błąd połączenia z API.");
-      });
+      .catch(() => setError("Błąd połączenia z API."));
   };
 
   useEffect(() => { fetchTasks(); }, []);
 
-  // --- NOWA FUNKCJA: Usuwanie zadania ---
   const handleDelete = async (id: number) => {
     try {
       await api.delete(`/tasks/${id}`);
       setItems(items.filter(item => item.id !== id));
-    } catch (err) {
-      console.error(err); // Dodane żeby uciszyć GitHuba
+    } catch {
       setError("Nie udało się usunąć zadania.");
     }
   };
 
-  // --- NOWA FUNKCJA: Zmiana statusu ---
   const handleToggle = async (item: TaskItem) => {
     try {
       const updated = { ...item, isCompleted: !item.isCompleted };
       await api.put(`/tasks/${item.id}`, updated);
       setItems(items.map(t => t.id === item.id ? updated : t));
-    } catch (err) {
-      console.error(err); // Dodane żeby uciszyć GitHuba
+    } catch {
       setError("Nie udało się zaktualizować zadania.");
     }
   };
@@ -54,8 +46,7 @@ const Dashboard = () => {
       await api.post('/tasks', { title: newTaskName });
       setNewTaskName("");
       fetchTasks();
-    } catch (err) {
-      console.error(err); // Dodane żeby uciszyć GitHuba
+    } catch {
       setError("Błąd podczas dodawania.");
     }
   };
