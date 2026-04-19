@@ -1,15 +1,14 @@
 using Xunit;
-using Backend.Models;
+using Backend.Models; // Używamy Twojego folderu z modelami
 
-namespace Backend.Tests
+namespace TaskManager.Tests
 {
     public class UnitTest1
     {
         [Fact]
         public void NewTask_ShouldNotBeCompleted()
         {
-            var task = new CloudTask { Name = "Przetestować bezpiecznik" };
-
+            var task = new TaskItem { Title = "Przetestować bezpiecznik" };
 
             Assert.False(task.IsCompleted);
         }
