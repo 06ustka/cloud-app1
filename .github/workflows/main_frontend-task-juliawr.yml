@@ -53,6 +53,6 @@ jobs:
       - name: Deploy
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'frontend-task-juliawr-f4f9fmhrcfdsgfh0' 
+          app-name: 'frontend-task-juliawr'
           package: dist
           startup-command: "pm2 serve /home/site/wwwroot --no-daemon --spa"
